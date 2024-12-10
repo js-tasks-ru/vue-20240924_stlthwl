@@ -1,4 +1,4 @@
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 
 export default defineComponent({
   name: 'CalculatorApp',
@@ -7,50 +7,44 @@ export default defineComponent({
     const operand1 = ref(0)
     const operand2 = ref(0)
     const operator = ref('sum')
-    const result   = ref(0)
 
-    function calculate() {
+    const result = computed(() => {
       switch (operator.value) {
         case 'sum':
-          result.value = operand1.value + operand2.value
-          break
+          return operand1.value + operand2.value
         case 'subtract':
-          result.value = operand1.value - operand2.value
-          break
+          return operand1.value - operand2.value
         case 'multiply':
-          result.value = operand1.value * operand2.value
-          break
+          return operand1.value * operand2.value
         case 'divide':
-          result.value = operand2.value !== 0 ? operand1.value / operand2.value : 'Error: division by zero'
-          break
+          return operand2.value !== 0 ? operand1.value / operand2.value : 'Error: division by zero'
       }
-    }
+    })
 
     return {
       operand1,
       operand2,
       operator,
       result,
-      calculate,
     }
   },
 
   template: `
     <div class="calculator">
-      <input type="number" aria-label="First operand" v-model="operand1" @input="calculate" />
+    <input type="number" aria-label="First operand" v-model="operand1" />
 
-      <div class="calculator__operators">
-        <label><input type="radio" name="operator" value="sum" v-model="operator" @change="calculate" />➕</label>
-        <label><input type="radio" name="operator" value="subtract" v-model="operator" @change="calculate" />➖</label>
-        <label><input type="radio" name="operator" value="multiply" v-model="operator" @change="calculate" />✖</label>
-        <label><input type="radio" name="operator" value="divide" v-model="operator" @change="calculate" />➗</label>
-      </div>
+    <div class="calculator__operators">
+      <label><input type="radio" name="operator" value="sum" v-model="operator" />➕</label>
+      <label><input type="radio" name="operator" value="subtract" v-model="operator" />➖</label>
+      <label><input type="radio" name="operator" value="multiply" v-model="operator" />✖</label>
+      <label><input type="radio" name="operator" value="divide" v-model="operator" />➗</label>
+    </div>
 
-      <input type="number" aria-label="Second operand" v-model="operand2" @input="calculate" />
+    <input type="number" aria-label="Second operand" v-model="operand2" />
 
-      <div>=</div>
+    <div>=</div>
 
-      <output>{{ result }}</output>
+    <output>{{ result }}</output>
     </div>
   `,
 })
