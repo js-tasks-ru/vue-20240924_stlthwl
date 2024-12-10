@@ -20,7 +20,6 @@ export default defineComponent({
     const pinStyle = computed(() => ({
       left: `${x.value}px`,
       top: `${y.value}px`,
-      position: 'absolute',
     }));
 
     return {
