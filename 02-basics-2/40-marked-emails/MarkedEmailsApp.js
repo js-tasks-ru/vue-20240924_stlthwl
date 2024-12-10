@@ -34,11 +34,11 @@ export default defineComponent({
 
   setup() {
     const search = ref('')
-
     const filteredEmails = computed(() => {
-      return emails.filter(email =>
-        email.toLowerCase().includes(search.value.toLowerCase())
-      )
+      return emails.map(email => ({
+        email,
+        isMarked: search.value ? email.toLowerCase().includes(search.value.toLowerCase()) : false
+      }))
     })
 
     return {
@@ -49,22 +49,22 @@ export default defineComponent({
 
   template: `
     <div>
-      <div class="form-group">
-        <input
-          type="search"
-          aria-label="Search"
-          v-model="search"
-          placeholder="search Emails ..."
-        />
-      </div>
-      <ul aria-label="Emails">
-        <li v-for="email in filteredEmails"
+    <div class="form-group">
+      <input
+        type="search"
+        aria-label="Search"
+        v-model="search"
+        placeholder="search Emails ..."
+      />
+    </div>
+    <ul aria-label="Emails">
+      <li v-for="({ email, isMarked }) in filteredEmails"
           :key="email"
-          :class="{ marked: search && email.toLowerCase().includes(search.toLowerCase()) }"
-        >
-          {{ email }}
-        </li>
-      </ul>
+          :class="{ marked: isMarked }"
+      >
+        {{ email }}
+      </li>
+    </ul>
     </div>
   `,
 })
