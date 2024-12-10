@@ -1,12 +1,28 @@
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { getWeatherData, WeatherConditionIcons } from './weather.service.ts'
 
 export default defineComponent({
   name: 'WeatherApp',
   setup() {
+    const weatherData = ref(getWeatherData())
+    const weatherConditionIcons = WeatherConditionIcons
+
+    const isNight = (sunrise, sunset, currentTime) => {
+      const current = convertToMinutes(currentTime)
+      const rise = convertToMinutes(sunrise)
+      const set = convertToMinutes(sunset)
+      return current < rise || current > set
+    }
+
+    const convertToMinutes = (time) => {
+      const [hours, minutes] = time.split(':').map(Number)
+      return hours * 60 + minutes
+    }
+
     return {
-      weatherData: getWeatherData(),
-      weatherConditionIcons: WeatherConditionIcons
+      weatherData,
+      weatherConditionIcons,
+      isNight,
     }
   },
   template: `
@@ -57,17 +73,5 @@ export default defineComponent({
       </li>
     </ul>
     </div>
-  `,
-  methods: {
-    isNight(sunrise, sunset, currentTime) {
-      const current = this.convertToMinutes(currentTime)
-      const rise = this.convertToMinutes(sunrise)
-      const set = this.convertToMinutes(sunset)
-      return current < rise || current > set
-    },
-    convertToMinutes(time) {
-      const [hours, minutes] = time.split(':').map(Number)
-      return hours * 60 + minutes
-    }
-  }
+  `
 })
