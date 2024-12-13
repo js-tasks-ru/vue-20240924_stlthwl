@@ -12,35 +12,56 @@ export default defineComponent({
   components: {
     UiAlert,
     UiContainer,
+    MeetupAgenda,
+    MeetupDescription,
+    MeetupCover,
+    MeetupInfo,
+  },
+
+  props: {
+    meetup: {
+      type: Object,
+      required: true,
+      validator: (meetup) => {
+        return ['title', 'image', 'description', 'agenda', 'organizer', 'place', 'date'].every((key) => key in meetup)
+      },
+    },
   },
 
   template: `
     <div>
 
-      <!-- Обложка митапа -->
+    <!-- Обложка митапа -->
+    <MeetupCover :title="meetup.title" :image="meetup.image" />
 
-      <UiContainer>
-        <div class="meetup">
-          <div class="meetup__content">
-            <h2>Описание</h2>
+    <UiContainer>
+      <div class="meetup">
+        <div class="meetup__content">
 
-            <!-- Описание митапа -->
+          <!-- Описание митапа -->
 
-            <h2>Программа</h2>
+          <h2>Описание</h2>
+          <MeetupDescription :description="meetup.description"/>
 
-            <!-- Программа митапа -->
-            <!-- Или при пустой программе - сообщение "Программа пока пуста..." в UiAlert -->
-            <UiAlert></UiAlert>
+          <h2>Программа</h2>
 
-          </div>
-          <div class="meetup__aside">
+          <!-- Программа митапа -->
+          <!-- Или при пустой программе - сообщение "Программа пока пуста..." в UiAlert -->
+          <MeetupAgenda v-if="meetup.agenda.length > 0" :agenda="meetup.agenda" />
+          <UiAlert v-else>Программа пока пуста...</UiAlert>
 
-            <!-- Краткая информация о митапе -->
+        </div>
+        <div class="meetup__aside">
 
-            <div class="meetup__aside-buttons"></div>
+          <!-- Краткая информация о митапе -->
+
+<!--          <MeetupInfo :organizer="meetup.organizer" :place="meetup.place" :date="meetup.date" />-->
+          <div class="meetup__aside-buttons">
+            <MeetupInfo :organizer="meetup.organizer" :place="meetup.place" :date="meetup.date" />
           </div>
         </div>
-      </UiContainer>
+      </div>
+    </UiContainer>
     </div>
   `,
 })
