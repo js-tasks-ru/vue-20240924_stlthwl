@@ -1,9 +1,34 @@
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed, onMounted, onBeforeUnmount } from 'vue';
 
 export default defineComponent({
   name: 'UiClock',
 
-  setup() {},
+  setup() {
+    const currentTime = ref(new Date());
 
-  template: `<div class="clock">10:12:02</div>`,
-})
+    const updateTime = () => {
+      currentTime.value = new Date();
+    };
+
+    const formattedTime = computed(() => {
+      return new Intl.DateTimeFormat(navigator.language, { timeStyle: 'medium' }).format(currentTime.value);
+    });
+
+    let timer;
+    onMounted(() => {
+      updateTime();
+      timer = setInterval(updateTime, 1000);
+    });
+
+    onBeforeUnmount(() => {
+      clearInterval(timer);
+    });
+
+    return {
+      formattedTime,
+    };
+  },
+
+  template: `<div class="clock">{{ formattedTime }}</div>`,
+});
+
