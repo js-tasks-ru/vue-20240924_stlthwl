@@ -1,15 +1,12 @@
-<script setup>
-// import type { MeetupAgendaItemDTO } from '@shgk/vue-course-ui'
+<script setup lang="ts">
+import type { MeetupAgendaItemDTO } from '@shgk/vue-course-ui'
 import { computed } from 'vue'
 import { UiIcon } from '@shgk/vue-course-ui'
 
-const props = defineProps({
-  agendaItem: {
-    // Настоящий тип - MeetupAgendaItemDTO
-    type: Object,
-    required: true,
-  },
-})
+// Определяем пропсы с типом MeetupAgendaItemDTO
+const props = defineProps<{
+  agendaItem: MeetupAgendaItemDTO
+}>()
 
 const agendaItemDefaultTitles = {
   registration: 'Регистрация',
@@ -56,32 +53,36 @@ const title = computed(() => agendaItemDefaultTitles[props.agendaItem.type])
 </template>
 
 <style scoped>
-/* _agenda-item.css */
 .agenda-item {
+  padding: 24px 0;
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-base);
-  padding: var(--spacing-large) 0;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .agenda-item__col:nth-child(1) {
-  flex: 0 0 var(--control-size-small);
+  flex: 1 0 48px;
+  max-width: 48px;
 }
 
 .agenda-item__col:nth-child(2) {
-  width: 115px;
+  flex: 115px;
+  max-width: 115px;
   color: var(--blue);
   white-space: nowrap;
 }
 
 .agenda-item__col:nth-child(3) {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-base);
+  flex: 1 0 calc(100% - 48 - 115);
+  max-width: calc(100% - 48 - 115);
+  padding-left: 24px;
 }
 
 .agenda-item__title {
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .agenda-item__lang {
@@ -92,5 +93,16 @@ const title = computed(() => agendaItemDefaultTitles[props.agendaItem.type])
   content: '•';
   color: var(--grey);
   padding: 0 1ch;
+}
+
+.agenda-item__talk {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+@media all and (min-width: 992px) {
+  .agenda-item {
+    padding: 40px 0;
+  }
 }
 </style>

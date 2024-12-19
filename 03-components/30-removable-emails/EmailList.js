@@ -22,7 +22,14 @@ export default defineComponent({
         :key="email"
         :email="email"
         :marked="isMarked"
+        @remove="emitRemove(index)"
       />
     </ul>
   `,
+
+  methods: {
+    emitRemove(index) {
+      this.$emit('remove-email', index)
+    }
+  }
 })

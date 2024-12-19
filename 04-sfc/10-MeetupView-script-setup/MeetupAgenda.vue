@@ -1,19 +1,11 @@
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { defineProps } from 'vue'
 import MeetupAgendaItem from './MeetupAgendaItem.vue'
 
-export default defineComponent({
-  name: 'MeetupAgenda',
-
-  components: {
-    MeetupAgendaItem,
-  },
-
-  props: {
-    agenda: {
-      type: Array,
-      required: true,
-    },
+const props = defineProps({
+  agenda: {
+    type: Array,
+    required: true,
   },
 })
 </script>
@@ -27,12 +19,17 @@ export default defineComponent({
 </template>
 
 <style scoped>
-/* _agenda.css */
+.agenda {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .agenda__item {
-  border-block-start: var(--border-width-small) solid var(--grey-3);
+  border-top: 1px solid var(--grey-3);
 }
 
 .agenda__item:first-child {
-  border-block-start: none;
+  border-top: none;
 }
 </style>

@@ -1,5 +1,23 @@
-<script>
-import { computed, defineComponent } from 'vue'
+<template>
+  <div class="agenda-item">
+    <div class="agenda-item__col">
+      <UiIcon :icon="icon"/>
+    </div>
+    <div class="agenda-item__col">{{ agendaItem.startsAt }} - {{ agendaItem.endsAt }}</div>
+    <div class="agenda-item__col">
+      <h3 class="agenda-item__title">{{ title }}</h3>
+      <p v-if="agendaItem.speaker" class="agenda-item__talk">
+        <span>{{ agendaItem.speaker }}</span>
+        <span class="agenda-item__dot"></span>
+        <span class="agenda-item__lang">{{ agendaItem.language }}</span>
+      </p>
+      <p v-if="agendaItem.description">{{ agendaItem.description }}</p>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
 import { UiIcon } from '@shgk/vue-course-ui'
 
 const agendaItemDefaultTitles = {
@@ -24,76 +42,48 @@ const agendaItemIcons = {
   other: 'cal-sm',
 }
 
-export default defineComponent({
-  name: 'MeetupAgendaItem',
-
-  components: {
-    UiIcon,
-  },
-
-  props: {
-    agendaItem: {
-      type: Object,
-      required: true,
-    },
-  },
-
-  setup(props) {
-    const icon = computed(() => agendaItemIcons[props.agendaItem.type])
-    const title = computed(() => agendaItemDefaultTitles[props.agendaItem.type])
-    return {
-      icon,
-      title,
-    }
+const props = defineProps({
+  agendaItem: {
+    type: Object,
+    required: true,
   },
 })
+
+const icon = computed(() => agendaItemIcons[props.agendaItem.type])
+const title = computed(() => agendaItemDefaultTitles[props.agendaItem.type])
 </script>
 
-<template>
-  <div class="agenda-item">
-    <div class="agenda-item__col">
-      <UiIcon :icon="icon" />
-    </div>
-    <div class="agenda-item__col">{{ agendaItem.startsAt }} - {{ agendaItem.endsAt }}</div>
-    <div class="agenda-item__col">
-      <div class="agenda-item__title">{{ title }}</div>
-      <div v-if="agendaItem.speaker" class="agenda-item__talk">
-        <span>{{ agendaItem.speaker }}</span>
-        <span class="agenda-item__dot"></span>
-        <span class="agenda-item__lang">{{ agendaItem.language }}</span>
-      </div>
-      <div v-if="agendaItem.description">{{ agendaItem.description }}</div>
-    </div>
-  </div>
-</template>
-
 <style scoped>
-/* _agenda-item.css */
 .agenda-item {
+  padding: 24px 0;
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-base);
-  padding: var(--spacing-large) 0;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .agenda-item__col:nth-child(1) {
-  flex: 0 0 var(--control-size-small);
+  flex: 1 0 48px;
+  max-width: 48px;
 }
 
 .agenda-item__col:nth-child(2) {
-  width: 115px;
+  flex: 115px;
+  max-width: 115px;
   color: var(--blue);
   white-space: nowrap;
 }
 
 .agenda-item__col:nth-child(3) {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-base);
+  flex: 1 0 calc(100% - 48 - 115);
+  max-width: calc(100% - 48 - 115);
+  padding-left: 24px;
 }
 
 .agenda-item__title {
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .agenda-item__lang {
@@ -104,5 +94,16 @@ export default defineComponent({
   content: '•';
   color: var(--grey);
   padding: 0 1ch;
+}
+
+.agenda-item__talk {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+@media all and (min-width: 992px) {
+  .agenda-item {
+    padding: 40px 0;
+  }
 }
 </style>

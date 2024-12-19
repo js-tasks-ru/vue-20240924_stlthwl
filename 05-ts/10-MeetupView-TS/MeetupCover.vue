@@ -1,16 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-
-  image: {
-    type: String,
-  },
-})
+const props = defineProps<{
+  title: string
+  image?: string
+}>()
 
 const bgStyle = computed(() => (props.image ? { '--bg-url': `url('${props.image}')` } : undefined))
 </script>
@@ -38,9 +32,10 @@ const bgStyle = computed(() => (props.image ? { '--bg-url': `url('${props.image}
 
 .meetup-cover__title {
   color: var(--white);
-  font-weight: bold;
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
   font-size: 36px;
-  line-height: var(--line-height);
+  line-height: 48px;
   padding: 0 16px;
   text-align: center;
 }
