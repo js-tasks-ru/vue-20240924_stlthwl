@@ -7,14 +7,24 @@
 </template>
 
 <style scoped>
+.stretch-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
 .stretch-container > * {
   width: 100%;
   height: 100%;
+  object-fit: scale-down;
 }
 
-.stretch-container > img,
-.stretch-container > video,
-.stretch-container > picture {
+::v-deep .stretch-container img,
+::v-deep .stretch-container video,
+::v-deep .stretch-container picture {
   object-fit: scale-down;
+  width: 100%;
+  height: 100%;
 }
 </style>
