@@ -1,34 +1,31 @@
-<script setup>
-// import type { MeetupDTO } from '@shgk/vue-course-ui'
+<script setup lang="ts">
+import type { MeetupDTO } from '@shgk/vue-course-ui'
 import { UiAlert, UiContainer } from '@shgk/vue-course-ui'
 import MeetupAgenda from './MeetupAgenda.vue'
 import MeetupDescription from './MeetupDescription.vue'
 import MeetupCover from './MeetupCover.vue'
 import MeetupInfo from './MeetupInfo.vue'
 
-defineProps({
-  meetup: {
-    // Настоящий тип - MeetupDTO
-    type: Object,
-    required: true,
-  },
-})
+// Определяем пропсы с типом MeetupDTO
+const props = defineProps<{
+  meetup: MeetupDTO
+}>()
 </script>
 
 <template>
   <div>
-    <MeetupCover :title="meetup.title" :image="meetup.image" />
+    <MeetupCover :title="props.meetup.title" :image="props.meetup.image" />
     <UiContainer>
       <div class="meetup">
         <div class="meetup__content">
           <h2>Описание</h2>
-          <MeetupDescription :description="meetup.description" />
+          <MeetupDescription :description="props.meetup.description" />
           <h2>Программа</h2>
-          <MeetupAgenda v-if="meetup.agenda.length" :agenda="meetup.agenda" />
+          <MeetupAgenda v-if="props.meetup.agenda.length" :agenda="props.meetup.agenda" />
           <UiAlert v-else>Программа пока пуста...</UiAlert>
         </div>
         <div class="meetup__aside">
-          <MeetupInfo :organizer="meetup.organizer" :place="meetup.place" :date="meetup.date" />
+          <MeetupInfo :organizer="props.meetup.organizer" :place="props.meetup.place" :date="props.meetup.date" />
           <div class="meetup__aside-buttons"></div>
         </div>
       </div>
@@ -39,25 +36,24 @@ defineProps({
 <style scoped>
 .meetup {
   display: flex;
-  flex-direction: column-reverse;
-  gap: var(--spacing-large);
-  margin-block-start: var(--spacing-large);
+  flex-direction: column;
+  margin: 48px 0 0;
 }
 
 .meetup__content {
 }
 
 .meetup__aside {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-base);
+  margin: 40px 0;
 }
 
 .meetup__aside-buttons {
-  padding-inline-start: calc(var(--control-size-small) + var(--spacing-small));
-  display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-smaller);
+  padding: 0 0 0 34px;
+  margin-top: 16px;
+}
+
+.meetup__aside-button {
+  margin: 0 10px 10px 0;
 }
 
 @media all and (min-width: 992px) {
@@ -66,17 +62,13 @@ defineProps({
   }
 
   .meetup__content {
-    flex: 1 0;
+    flex: 1 0 calc(100% - 350px);
   }
 
   .meetup__aside {
-    width: 350px;
-    /* Inline with tabs */
-    margin-block-start: var(--control-size);
-  }
-
-  .meetup__aside-buttons {
-    flex-direction: column;
+    flex: 1 0 350px;
+    padding: 50px 0 0 44px;
+    margin: 0;
   }
 }
 </style>
